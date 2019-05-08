@@ -81,23 +81,11 @@
             var date = new Date($('#mfc-date').val());
             var year = date.getFullYear();
             var month = date.getMonth() + 1;
-            var day = date.getDate();
-            var high = 0;
-            var middle = 0;
-            var low = 0;
-            high += (year - 1981 + 1) * 2;
-            if (month > 7) {
-                high++;
-            }
+            var dayOfMonth = date.getDate();
 
-            middle += month * 2;
-            if (day > 15) {
-                middle++;
-            }
+            var days = ((year - 1980) << 9) + (month << 5) + dayOfMonth;
 
-            low = day;
-
-            $('#mfc-days').val(`${padding(high.toString(16))}${middle.toString(16).slice(middle > 15 ? 1 : 0)}${low.toString(16).slice(low > 15 ? 1 : 0)}`.toUpperCase());
+            $('#mfc-days').val(padding(days.toString(16).toUpperCase(), 4));
             showResult();
         }
 
@@ -105,9 +93,6 @@
             var days;
             try {
                 days = parseInt($('#mfc-days').val(), 16);
-                if (days < 0x21) {
-                    throw Error(`value too small: ${days}`)
-                }
                 $('#mfc-days').val(padding(days.toString(16).toUpperCase(), 4));
             } catch (error) {
                 console.error(error);
@@ -115,31 +100,17 @@
                 return;
             }
 
-            var high = Math.floor(days / 256);
+            var year = (days >> 9) + 1980;
+            var month = (days & 0x1F0) >> 5;
+            var dayOfMonth = days & 0x1F;
 
-            var middle = (days & 0xF0) / 16;
-            
-            var low = days & 0xF;
-
-            if (high % 2 == 1) {
-                middle += 16;
-            }
-
-            if (middle % 2 == 1) {
-                low += 16;
-            }
-
-            var year = Math.floor(high / 2) + 1980;
-            var month = Math.floor(middle / 2);
-            var day = low;
-
-            if (year === 0 || month === 0 || day === 0) {
-                console.error(`invalid date: ${year}-${padding(month)}-${padding(day)}`);
+            if (year === 0 || month === 0 || dayOfMonth === 0) {
+                console.error(`invalid date: ${year}-${padding(month)}-${padding(dayOfMonth)}`);
                 init();
                 return;
             }
 
-            $('#mfc-date').val(`${year}-${padding(month)}-${padding(day)}`);
+            $('#mfc-date').val(`${year}-${padding(month)}-${padding(dayOfMonth)}`);
 
             showResult();
         }
@@ -149,7 +120,7 @@
             var daysByteString;
             try {
                 days = parseInt($('#mfc-days').val(), 16);
-                daysByteString=`${padding((days & 0xFF).toString(16).toUpperCase())} ${padding(Math.floor(days / 256).toString(16).toUpperCase())}`;
+                daysByteString=`${padding((days & 0xFF).toString(16).toUpperCase())} ${padding((days >> 8).toString(16).toUpperCase())}`;
             } catch (error) {
                 console.error(error);
                 init();
