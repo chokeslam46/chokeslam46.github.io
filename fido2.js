@@ -196,7 +196,10 @@ const test = () => {
   })
   .then((response) => {
     seconds++;
-    $('#login_result').html(`<pre>${seconds}. ${JSON.stringify(response)}</pre>`);
+    $('#login_result').html(`<pre>
+      Hello, ${response.displayname}
+      ${seconds}. ${JSON.stringify(response)}
+    </pre>`);
     setTimeout(test, 1000);
   })
   .catch((err) => {
