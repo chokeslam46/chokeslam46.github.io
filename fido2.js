@@ -23,7 +23,10 @@ const register = () => {
   .then((response) => {
     createCredential(response);
   })
-  .catch(console.error);
+  .catch((err) => {
+    $('#login_result').html(`<font colo="red"><pre>${JSON.stringify(err.message)}</pre></font>`);
+    $('#dateForm').hide();
+  });
 };
 
 const createCredential = (data) => {
@@ -84,7 +87,10 @@ const sendRegisterResponse = (data) => {
   .then((response) => {
     console.log(response);
   })
-  .catch(console.error);
+  .catch((err) => {
+    $('#login_result').html(`<font colo="red"><pre>${JSON.stringify(err.message)}</pre></font>`);
+    $('#dateForm').hide();
+  });
 };
 
 const login = () => {
@@ -111,7 +117,10 @@ const login = () => {
   .then((response) => {
     assertCredential(response);
   })
-  .catch(console.error);
+  .catch((err) => {
+    $('#login_result').html(`<font colo="red"><pre>${JSON.stringify(err.message)}</pre></font>`);
+    $('#dateForm').hide();
+  });
 };
 
 const assertCredential = (data) => {
@@ -166,7 +175,10 @@ const sendLoginResponse = (data) => {
       throw Error('error');
     }
   })
-  .catch(console.error);
+  .catch((err) => {
+    $('#login_result').html(`<font colo="red"><pre>${JSON.stringify(err.message)}</pre></font>`);
+    $('#dateForm').hide();
+  });
 };
 
 const test = () => {
