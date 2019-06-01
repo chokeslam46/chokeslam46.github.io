@@ -31,7 +31,69 @@
 </head>
 
 <body>
+    <div id="registerForm" class="container">
+        <form action="javascript:void(0);">
+            <div class="container-fluid">
+                <div class="row">
+                    <label for="email" class="col-2 col-form-label">Email</label>
+                    <div class="col-10">
+                        <input class="form-control" type="email" id="email">
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="displayname" class="col-2 col-form-label">Displayname</label>
+                    <div class="col-10">
+                        <input class="form-control" type="text" id="displayname">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-block" onclick="register();">Register</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="container" style="margin-bottom: 48px;"></div>
+
+    <div id="loginForm" class="container">
+        <form action="javascript:void(0);">
+            <div class="container-fluid">
+                <div class="row">
+                    <label for="login_email" class="col-2 col-form-label">Email</label>
+                    <div class="col-10">
+                        <input class="form-control" type="email" id="login_email">
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="remember" class="col-2 col-form-label">Remember Token</label>
+                    <div class="col-1">
+                        <input class="form-control form-check-input" type="checkbox" id="remember">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-block" onclick="login();">Login</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="container" style="margin-bottom: 48px;"></div>
+
     <div class="container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12" id="login_result"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="margin-bottom: 48px;"></div>
+    
+    <div id="dateForm" class="container">
         <form action="javascript:void(0);">
             <div class="container-fluid">
                 <div class="row">
@@ -59,81 +121,18 @@
             </div>
         </form>
     </div>
+    <script src="fido2.js"></script>
+    <script src="date.js"></script>
+    <script src="base64url-arraybuffer.js"></script>
     <script>
-        function padding(val, len = 2) {
-            var padded = '';
-            for (let index = 0; index < len; index++) {
-                padded += '0';
-            }
-            var result = `${padded}${val}`
-            return result.slice(result.length - len);
-        }
-
-        function init() {
-            var now = new Date();
+        const init = () => {
+            $('#dateForm').hide();
+            const now = new Date();
             $('#mfc-date').val(`${now.getFullYear()}-${padding(now.getMonth() + 1)}-${padding(now.getDate())}`);
             dateToDays();
         }
 
         $(init);
-        
-        function dateToDays() {
-            var date = new Date($('#mfc-date').val());
-            var year = date.getFullYear();
-            var month = date.getMonth() + 1;
-            var dayOfMonth = date.getDate();
-
-            var days = ((year - 1980) << 9) + (month << 5) + dayOfMonth;
-
-            $('#mfc-days').val(padding(days.toString(16).toUpperCase(), 4));
-            showResult();
-        }
-
-        function daysToDate() {
-            var days;
-            try {
-                days = parseInt($('#mfc-days').val(), 16);
-                $('#mfc-days').val(padding(days.toString(16).toUpperCase(), 4));
-            } catch (error) {
-                console.error(error);
-                init();
-                return;
-            }
-
-            var year = (days >> 9) + 1980;
-            var month = (days & 0x1F0) >> 5;
-            var dayOfMonth = days & 0x1F;
-
-            if (year === 0 || month === 0 || dayOfMonth === 0) {
-                console.error(`invalid date: ${year}-${padding(month)}-${padding(dayOfMonth)}`);
-                init();
-                return;
-            }
-
-            $('#mfc-date').val(`${year}-${padding(month)}-${padding(dayOfMonth)}`);
-
-            showResult();
-        }
-
-        function showResult() {
-            var days;
-            var daysByteString;
-            try {
-                days = parseInt($('#mfc-days').val(), 16);
-                daysByteString=`${padding((days & 0xFF).toString(16).toUpperCase())} ${padding((days >> 8).toString(16).toUpperCase())}`;
-            } catch (error) {
-                console.error(error);
-                init();
-                return;
-            }
-            
-            $('#result').html(`
-                <div class="col-2">S7B0</div>
-                <div class="col-10">4A ${daysByteString} 00 00 00 00 00 00 00 00 00 1E 00 00 00 00 00</div>
-                <div class="col-2">S8B0</div>
-                <div class="col-10">4A ${daysByteString} 00 00 00 00 00 1E 00 00 00 00 00 00 00 00 00</div>
-            `);
-        }
     </script>
 </body>
 </html>
