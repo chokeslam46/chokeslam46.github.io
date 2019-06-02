@@ -5,7 +5,7 @@ const register = () => {
     throw Error('empty data');
   }
 
-  fetch('https://r02921049.ddns.net:9000/v0/register/begin', {
+  fetch('https://e711.csie.pccu.edu.tw:9000//v0/register/begin', {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -69,7 +69,7 @@ const publicKeyCredentialToJSON = (pubKeyCred) => {
 };
 
 const sendRegisterResponse = (data) => {
-  fetch('https://r02921049.ddns.net:9000/v0/register/finish', {
+  fetch('https://e711.csie.pccu.edu.tw:9000//v0/register/finish', {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -99,7 +99,7 @@ const login = () => {
     throw Error('empty data');
   }
 
-  fetch('https://r02921049.ddns.net:9000/v0/login/begin', {
+  fetch('https://e711.csie.pccu.edu.tw:9000//v0/login/begin', {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -141,7 +141,7 @@ const assertCredential = (data) => {
 let seconds = 0;
 
 const sendLoginResponse = (data) => {
-  fetch('https://r02921049.ddns.net:9000/v0/login/finish', {
+  fetch('https://e711.csie.pccu.edu.tw:9000//v0/login/finish', {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -182,7 +182,7 @@ const sendLoginResponse = (data) => {
 };
 
 const test = () => {
-  fetch('https://r02921049.ddns.net:9000/v0/test', {
+  fetch('https://e711.csie.pccu.edu.tw:9000//v0/test', {
     method: 'GET',
     credentials: 'include',
     headers: {
